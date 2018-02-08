@@ -11,25 +11,30 @@ public class Client {
         BufferedReader inFromUser = 
           new BufferedReader(new InputStreamReader(System.in)); 
 
-        Socket clientSocket = new Socket("hostname", 6789); 
-
+        Socket clientSocket = new Socket("192.168.1.100", 6789); 
         DataOutputStream outToServer = 
-          new DataOutputStream(clientSocket.getOutputStream()); 
-
+        		new DataOutputStream(clientSocket.getOutputStream()); 
+        
         
         BufferedReader inFromServer = 
-                new BufferedReader(new
-                InputStreamReader(clientSocket.getInputStream())); 
-
-              sentence = inFromUser.readLine(); 
-
-              outToServer.writeBytes(sentence + '\n'); 
-
-              modifiedSentence = inFromServer.readLine(); 
-
-              System.out.println("FROM SERVER: " + modifiedSentence); 
-
-              clientSocket.close(); 
-                         
-          } 
-      } 
+        		new BufferedReader(new
+        				InputStreamReader(clientSocket.getInputStream())); 
+        while(true)
+        {
+	
+	              sentence = inFromUser.readLine(); 
+	
+	              outToServer.writeBytes(sentence + '\n'); 
+	              if(sentence.toLowerCase().equals("quit"))
+	            	  break;
+	              modifiedSentence = inFromServer.readLine(); 
+	
+	              System.out.println("FROM SERVER: " + modifiedSentence); 
+	
+        }
+        inFromServer.close();
+        outToServer.close();
+        inFromUser.close();
+        clientSocket.close(); 
+     } 
+} 

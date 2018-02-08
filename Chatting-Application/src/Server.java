@@ -9,24 +9,33 @@ public class Server {
       String capitalizedSentence; 
 
       ServerSocket welcomeSocket = new ServerSocket(6789); 
-  
-      while(true) { 
-  
-            Socket connectionSocket = welcomeSocket.accept(); 
-
-           BufferedReader inFromClient = 
-              new BufferedReader(new
-              InputStreamReader(connectionSocket.getInputStream())); 
-
-           DataOutputStream  outToClient = 
-             new DataOutputStream(connectionSocket.getOutputStream()); 
-
-           clientSentence = inFromClient.readLine(); 
-
-           capitalizedSentence = clientSentence.toUpperCase() + '\n'; 
-
-           outToClient.writeBytes(capitalizedSentence); 
-        } 
+      
+      	Socket connectionSocket = welcomeSocket.accept(); 
+      	
+		BufferedReader inFromClient =new BufferedReader(new
+				  InputStreamReader(connectionSocket.getInputStream())); 
+		
+		DataOutputStream  outToClient = 
+	             new DataOutputStream(connectionSocket.getOutputStream()); 
+		
+		while(true)
+		{			
+			
+			clientSentence = inFromClient.readLine(); 
+			if(clientSentence==null)break;
+			
+			capitalizedSentence = clientSentence.toUpperCase() + '\n'; 
+			
+			if(capitalizedSentence.equals("QUIT\n"))break;
+			
+			outToClient.writeBytes(capitalizedSentence); 
+			
+		}
+		        
+		inFromClient.close();
+		outToClient.close();
+		welcomeSocket.close();
+		connectionSocket.close();
     } 
 } 
  
