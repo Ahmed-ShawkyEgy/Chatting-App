@@ -16,7 +16,6 @@ public class Server{
 			
 			Connection c = new Connection(connectionSocket);
 			c.start();
-			
 			}catch(Exception e)
 			{
 				System.err.println(e.getMessage());
@@ -24,7 +23,7 @@ public class Server{
 			}
 			
 		}
-		welcomeSocket.close();
+//		welcomeSocket.close();
     } 
 } 
 

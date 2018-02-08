@@ -11,20 +11,14 @@ public class Server{
 		
 		while(true)
 		{			
-			try{
+			
 			Socket connectionSocket = welcomeSocket.accept(); 
 			
 			Connection c = new Connection(connectionSocket);
 			c.start();
 			
-			}catch(Exception e)
-			{
-				System.err.println(e.getMessage());
-				break;
-			}
-			
 		}
-		welcomeSocket.close();
+//		welcomeSocket.close();
     } 
 } 
 
