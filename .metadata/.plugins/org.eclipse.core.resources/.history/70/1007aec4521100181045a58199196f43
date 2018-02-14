@@ -23,7 +23,7 @@ public class Server{
 			try{
 				Socket connectionSocket = welcomeSocket.accept(); 
 				
-				Connection c = new Connection(connectionSocket,index++,member_list,name_to_index,allMembers);
+				Connection c = new Connection(connectionSocket,index++);
 				
 				member_list.add(c);
 				
