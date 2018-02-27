@@ -157,7 +157,9 @@ class Connection extends Thread
 		if(my_server.sendTo(reciever_name, message, TTL))
 			outToClient.writeBytes("Server: Message sent\n"); 
 		else
-			outToClient.writeBytes("Server: Failed Sending the message. This client is probably offline\n"); 
+			outToClient.writeBytes("Server: Failed Sending the message."
+					+ "Either this client is offline"
+					+ " or the TTL you inserted wasn't long enough\n"); 
 	}
 	
 	public boolean recieve(String message)
