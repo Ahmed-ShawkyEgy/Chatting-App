@@ -17,13 +17,15 @@ class Connection extends Thread
 	private int index;
 	private boolean isConnected;
 	
+	private Server my_server;
+	
 	ArrayList<Connection> member_list;
 	HashMap<String, Integer>  name_to_index;
 	StringBuilder allMembers;
 	
 	public Connection(Socket connectionSocket,int i,
 			ArrayList<Connection> member_list,HashMap<String, Integer>map,
-			StringBuilder allMembers) {
+			StringBuilder allMembers , Server my_server) {
 		this.connectionSocket = connectionSocket;
 		index = i;
 		user_name = null;
@@ -32,6 +34,9 @@ class Connection extends Thread
 		this.member_list = member_list;
 		this.name_to_index = map;
 		this.allMembers = allMembers;
+		
+		this.my_server = my_server;
+		
 	}
 	
 	
@@ -79,7 +84,7 @@ class Connection extends Thread
 		
 		}catch(Exception e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
@@ -131,27 +136,28 @@ class Connection extends Thread
 		
 		outToClient.writeBytes("Server: Enter username: \n"); 
 		String reciever_name = inFromClient.readLine();
-		
-		if(!name_to_index.containsKey(reciever_name))
-		{
-			outToClient.writeBytes("Server: Invalid username\n"); 
-			return;
-		}
-		
+
 		outToClient.writeBytes("Server: Enter Message: \n"); 
 		String message = inFromClient.readLine();
 		
-		sendTo(reciever_name, message);
-	}
-	
-	private void sendTo(String reciever_name,String message) throws IOException
-	{
-		int idx = name_to_index.get(reciever_name);
-		boolean recieved = member_list.get(idx).recieve(user_name+": "+message);
-		if(recieved)
+		outToClient.writeBytes("Server: Enter TTL: \n"); 
+		
+		int TTL ;
+		while(true)
+		{
+			try{
+				TTL = Integer.parseInt(inFromClient.readLine());	
+				break;
+			}catch(Exception e)
+			{
+				System.out.println("Please enter a valid number");
+			}
+		}
+		
+		if(my_server.sendTo(reciever_name, message, TTL))
 			outToClient.writeBytes("Server: Message sent\n"); 
 		else
-		outToClient.writeBytes("Server: Failed Sending the message. This client is probably offline\n"); 
+			outToClient.writeBytes("Server: Failed Sending the message. This client is probably offline\n"); 
 	}
 	
 	public boolean recieve(String message)

@@ -8,8 +8,24 @@ public class Client {
     public static void main(String argv[]) throws Exception 
     { 
     	
-        Socket clientSocket = new Socket("192.168.1.100", 6789); 
-        
+//        Socket clientSocket = new Socket("192.168.1.100", 6789); 
+    	Socket clientSocket;
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	System.out.println("Connect to a server");
+    	System.out.println("Enter the port number:");
+    	while(true)
+    	{
+    		try{
+    			int port = Integer.parseInt(br.readLine());
+    			clientSocket = new Socket("localhost",port);
+    			break;
+    		}catch(Exception e)
+    		{
+    			System.out.println(e.getMessage());
+    			System.out.println("Please enter a valid port number");
+    		}
+    	}
+    	System.out.println("Connection established Successfully!");
         
         Sender sender = new Sender(clientSocket);
         Reciever reciever = new Reciever(clientSocket);
