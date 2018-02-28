@@ -3,8 +3,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 	
 class Connection extends Thread
@@ -19,21 +17,11 @@ class Connection extends Thread
 	
 	private Server my_server;
 	
-	ArrayList<Connection> member_list;
-	HashMap<String, Integer>  name_to_index;
-	StringBuilder allMembers;
-	
-	public Connection(Socket connectionSocket,int i,
-			ArrayList<Connection> member_list,HashMap<String, Integer>map,
-			StringBuilder allMembers , Server my_server) {
+	public Connection(Socket connectionSocket,int i,Server my_server) {
 		this.connectionSocket = connectionSocket;
 		index = i;
 		user_name = null;
 		isConnected = false;
-		
-		this.member_list = member_list;
-		this.name_to_index = map;
-		this.allMembers = allMembers;
 		
 		this.my_server = my_server;
 		
@@ -97,7 +85,7 @@ class Connection extends Thread
 	
 	private void getMembers() throws IOException
 	{
-		outToClient.writeBytes("Server: "+allMembers.toString()+"\n");
+		outToClient.writeBytes("Server: member list:\n"+my_server.getMembers());
 	}
 	
 	private void joinServer() throws IOException
@@ -111,17 +99,13 @@ class Connection extends Thread
 		{
 			outToClient.writeBytes("Server: Enter username:\n"); 
 			String in= inFromClient.readLine();
-			if(name_to_index.containsKey(in) && member_list.get(name_to_index.get(in)).isConnected)
+			if(!my_server.add(in, index))
 			{
 				outToClient.writeBytes("Server: This name is Already taken :(\n"); 
 				return;
 			}
 			user_name = in;
-			allMembers.append(user_name+" ");
 			isConnected = true;
-			
-			name_to_index.put(user_name, this.index);
-			
 			outToClient.writeBytes("Server: Welcome "+user_name+"\n"); 
 		}
 	}
@@ -179,5 +163,13 @@ class Connection extends Thread
 		outToClient.close();
 		connectionSocket.close();
 	}
+	
 
+
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	
 }

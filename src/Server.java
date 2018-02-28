@@ -7,7 +7,6 @@ public class Server extends Thread{
 	
 	ArrayList<Connection> member_list;
 	HashMap<String, Integer>  name_to_index;
-	StringBuilder allMembers;
 	private Server other_server;
 	public int port_number;
 	
@@ -32,7 +31,6 @@ public class Server extends Thread{
 			ServerSocket welcomeSocket = new ServerSocket(port_number); 
 		    member_list = new ArrayList<Connection>();
 			name_to_index = new HashMap<String, Integer>();
-			allMembers = new StringBuilder();
 			int index = 0;
 			
 			while(true)
@@ -40,7 +38,7 @@ public class Server extends Thread{
 				try{
 					Socket connectionSocket = welcomeSocket.accept(); 
 					
-					Connection c = new Connection(connectionSocket,index++,member_list,name_to_index,allMembers,this);
+					Connection c = new Connection(connectionSocket,index++,this);
 					
 					member_list.add(c);
 					
@@ -74,5 +72,34 @@ public class Server extends Thread{
 			return other_server.sendTo(name, message, TTL-1);
 		}
 		return false;
+	}
+	
+	public boolean isValidName(String name)
+	{
+		if(name_to_index.containsKey(name))
+			return false;
+		if(other_server!=null && other_server.name_to_index.containsKey(name))
+			return false;
+		return true;
+	}
+	
+	public boolean add(String name,int index)
+	{
+		if(!isValidName(name))
+			return false;
+		name_to_index.put(name, index);
+		return true;
+	}
+	
+	public String getMembers()
+	{
+		String ret = "";
+		for(Connection c : member_list)
+			if(c.getName()!=null)
+				ret += c.getUser_name()+"\n";
+		for(Connection c : other_server.member_list)
+			if(c.getName()!=null)
+				ret += c.getUser_name()+"\n";
+		return ret;
 	}
 }
