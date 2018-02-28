@@ -154,7 +154,7 @@ class Connection extends Thread
 			}
 		}
 		
-		if(my_server.sendTo(reciever_name, message, TTL))
+		if(my_server.sendTo(reciever_name, message, TTL-1))
 			outToClient.writeBytes("Server: Message sent\n"); 
 		else
 			outToClient.writeBytes("Server: Failed Sending the message."

@@ -67,8 +67,7 @@ public class Server extends Thread{
 		if(name_to_index.containsKey(name))
 		{
 			int index = name_to_index.get(name);
-			member_list.get(index).recieve(message);
-			return true;
+			return member_list.get(index).recieve(message);
 		}
 		else if(other_server!=null)
 		{
