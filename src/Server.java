@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -7,7 +11,11 @@ public class Server extends Thread{
 	
 	ArrayList<Connection> member_list;
 	HashMap<String, Integer>  name_to_index;
-	private Server other_server;
+	
+	
+	private DataOutputStream out_to_server;
+	private BufferedReader in_from_server;
+	
 	public int port_number;
 	
 	public Server(int port_number)
@@ -16,12 +24,24 @@ public class Server extends Thread{
 		
 	}
 	
-	
-	
-	public void setOther_server(Server other_server) {
-		this.other_server = other_server;
+	public void connect(int port_number){
+		try {
+			@SuppressWarnings("resource")
+			Socket socket = new Socket("localhost",port_number);
+			out_to_server = new DataOutputStream(socket.getOutputStream());
+			out_to_server.writeBytes("SERVER\n");
+			in_from_server = 
+					new BufferedReader(new
+							InputStreamReader(socket.getInputStream())); 
+			
+			System.out.println("Connected to other Server Successfully!");
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-
+	
+	
 
 
 	public void run()
@@ -60,27 +80,39 @@ public class Server extends Thread{
 	
 	public boolean sendTo(String name,String message,int TTL)
 	{
-		if(TTL<=0)
-			return false;
-		if(name_to_index.containsKey(name))
-		{
-			int index = name_to_index.get(name);
-			return member_list.get(index).recieve(message);
-		}
-		else if(other_server!=null)
-		{
-			return other_server.sendTo(name, message, TTL-1);
-		}
+//		if(TTL<=0)
+//			return false;
+//		if(name_to_index.containsKey(name))
+//		{
+//			int index = name_to_index.get(name);
+//			return member_list.get(index).recieve(message);
+//		}
+//		else if(other_server!=null)
+//		{
+//			return other_server.sendTo(name, message, TTL-1);
+//		}
 		return false;
+	}
+	
+	public boolean exists(String name)
+	{
+		return name_to_index.containsKey(name);
 	}
 	
 	public boolean isValidName(String name)
 	{
 		if(name_to_index.containsKey(name))
 			return false;
-		if(other_server!=null && other_server.name_to_index.containsKey(name))
+		try{
+		out_to_server.writeBytes("EXIST\n");
+		out_to_server.writeBytes(name+"\n");
+		String response = in_from_server.readLine();
+		return response.equals("false");
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 			return false;
-		return true;
+		}
 	}
 	
 	public boolean add(String name,int index)
@@ -93,13 +125,31 @@ public class Server extends Thread{
 	
 	public String getMembers()
 	{
+		String ret = myMembers();
+		try{
+			out_to_server.writeBytes("MEMBERS\n");
+			while(true)
+			{
+				String response = in_from_server.readLine();
+				if(response.equals("\0"))
+					break;
+				ret += response +"\n";
+			}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			ret += "SERVER: error occured while trying to retrieve all members!\n";
+		}
+		return ret;
+	}
+	
+	public String myMembers()
+	{
 		String ret = "";
 		for(Connection c : member_list)
 			if(c.getName()!=null)
 				ret += c.getUser_name()+"\n";
-		for(Connection c : other_server.member_list)
-			if(c.getName()!=null)
-				ret += c.getUser_name()+"\n";
 		return ret;
 	}
+	
 }

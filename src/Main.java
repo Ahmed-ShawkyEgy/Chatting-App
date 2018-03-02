@@ -7,9 +7,9 @@ public class Main {
 		server1.start();
 		Server server2 = new Server(3000);
 		server2.start();
-		
-		server1.setOther_server(server2);
-		server2.setOther_server(server1);
+
+		server1.connect(3000);
+		server2.connect(2000);
 	}
 
 }

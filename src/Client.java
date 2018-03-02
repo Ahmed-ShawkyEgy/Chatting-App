@@ -32,6 +32,7 @@ public class Client {
         
         sender.start();
         reciever.start();
+        
      } 
     
     static class Reciever extends Thread{
@@ -90,6 +91,8 @@ public class Client {
 	  				new DataOutputStream(clientSocket.getOutputStream());
 		  		
 		  		String sentence;
+		  		
+		  		outToServer.writeBytes("CLIENT\n");
 		  		
 		  		while(true)
 		  		{

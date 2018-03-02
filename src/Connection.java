@@ -13,7 +13,7 @@ class Connection extends Thread
 	
 	private String user_name;
 	private int index;
-	private boolean isConnected;
+	private boolean isConnected , isClient;
 	
 	private Server my_server;
 	
@@ -38,33 +38,59 @@ class Connection extends Thread
 		
 		outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 		
+		if(inFromClient.readLine().equals("CLIENT"))
+			isClient = true;
+		else
+			isClient = false;
+		
 		loop: while(true)
 		{			
 			
 			clientSentence = inFromClient.readLine(); 
 			capitalizedSentence = clientSentence.toUpperCase(); 
 			
-			switch (capitalizedSentence)
+			if(isClient)
 			{
-			case "QUIT":
-				quit();
-				break loop;
-
-			case "GET-MEMBERS":
-				getMembers();
-				break;
-				
-			case "JOIN":
-				joinServer();
-				break;
-				
-			case "CHAT":
-				chat();
-				break;
-				
-			default:
-				outToClient.writeBytes("Server-Echo: "+capitalizedSentence+"\n"); 
-				break;
+				switch (capitalizedSentence)
+				{
+				case "QUIT":
+					quit();
+					break loop;
+	
+				case "GET-MEMBERS":
+					getMembers();
+					break;
+					
+				case "JOIN":
+					joinServer();
+					break;
+					
+				case "CHAT":
+					chat();
+					break;
+				default:
+					outToClient.writeBytes("Server-Echo: "+capitalizedSentence+"\n"); 
+					break;
+				}
+			}
+			else
+			{
+				switch (capitalizedSentence)
+				{
+					case "MEMBERS":
+						System.out.println("Members Request");
+						outToClient.writeBytes(my_server.getMembers()+"\0");
+						break;
+					case "EXIST":
+						String name = inFromClient.readLine();
+						outToClient.writeBytes(my_server.exists(name)+"\n");
+						break;
+					case "CHAT":
+						break;
+					default:
+						outToClient.writeBytes("ERROR: "+capitalizedSentence);
+					
+				}
 			}
 			
 		}
@@ -101,6 +127,7 @@ class Connection extends Thread
 			String in= inFromClient.readLine();
 			if(!my_server.add(in, index))
 			{
+				System.out.println("READ FROM CLIENT HIS NAME!!" + in);
 				outToClient.writeBytes("Server: This name is Already taken :(\n"); 
 				return;
 			}
