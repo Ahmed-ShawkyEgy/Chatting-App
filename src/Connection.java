@@ -78,8 +78,9 @@ class Connection extends Thread
 				switch (capitalizedSentence)
 				{
 					case "MEMBERS":
-						System.out.println("Members Request");
-						outToClient.writeBytes(my_server.getMembers()+"\0");
+						String members = my_server.myMembers();
+						System.out.println("My members "+members);
+						outToClient.writeBytes(members+"\n");
 						break;
 					case "EXIST":
 						String name = inFromClient.readLine();
@@ -124,10 +125,14 @@ class Connection extends Thread
 		else
 		{
 			outToClient.writeBytes("Server: Enter username:\n"); 
-			String in= inFromClient.readLine();
+			String in= inFromClient.readLine().trim();
+			if(in.isEmpty())
+			{
+				outToClient.writeBytes("Server: Can't take empty name :(\n"); 
+				return;
+			}
 			if(!my_server.add(in, index))
 			{
-				System.out.println("READ FROM CLIENT HIS NAME!!" + in);
 				outToClient.writeBytes("Server: This name is Already taken :(\n"); 
 				return;
 			}
@@ -191,7 +196,6 @@ class Connection extends Thread
 		connectionSocket.close();
 	}
 	
-
 
 
 	public String getUser_name() {

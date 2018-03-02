@@ -126,13 +126,17 @@ public class Server extends Thread{
 	public String getMembers()
 	{
 		String ret = myMembers();
+		System.out.println("My members: "+ret);
 		try{
 			out_to_server.writeBytes("MEMBERS\n");
 			while(true)
 			{
 				String response = in_from_server.readLine();
-				if(response.equals("\0"))
+				System.out.println("Recieved |"+response+"|");
+				if(response.isEmpty()){
+					System.out.println("Reached Null");
 					break;
+				}
 				ret += response +"\n";
 			}
 		}catch(Exception e)
@@ -147,8 +151,9 @@ public class Server extends Thread{
 	{
 		String ret = "";
 		for(Connection c : member_list)
-			if(c.getName()!=null)
+			if(c.getUser_name()!=null)
 				ret += c.getUser_name()+"\n";
+		System.out.println("myMembers(): "+ret);
 		return ret;
 	}
 	
