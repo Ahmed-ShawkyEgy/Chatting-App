@@ -74,23 +74,25 @@ public class Server extends Thread{
 				welcomeSocket.close();
 		}catch(Exception e)
 		{
-			System.out.println();
+			e.printStackTrace();
 		}
 	}
 	
 	public boolean sendTo(String name,String message,int TTL)
 	{
-//		if(TTL<=0)
-//			return false;
-//		if(name_to_index.containsKey(name))
-//		{
-//			int index = name_to_index.get(name);
-//			return member_list.get(index).recieve(message);
-//		}
-//		else if(other_server!=null)
-//		{
-//			return other_server.sendTo(name, message, TTL-1);
-//		}
+		if(TTL--<0)
+			return false;
+		if(name_to_index.containsKey(name))
+		{
+			int index = name_to_index.get(name);
+			return member_list.get(index).recieve(message,TTL);
+		}
+		try{
+			out_to_server.writeBytes("CHAT\n");
+			out_to_server.writeBytes(name+"\n"+message+"\n"+TTL+"\n");
+			if(in_from_server.readLine().equals("true"))
+				return true;
+		}catch(Exception e){}
 		return false;
 	}
 	
@@ -126,15 +128,12 @@ public class Server extends Thread{
 	public String getMembers()
 	{
 		String ret = myMembers();
-		System.out.println("My members: "+ret);
 		try{
 			out_to_server.writeBytes("MEMBERS\n");
 			while(true)
 			{
 				String response = in_from_server.readLine();
-				System.out.println("Recieved |"+response+"|");
 				if(response.isEmpty()){
-					System.out.println("Reached Null");
 					break;
 				}
 				ret += response +"\n";
@@ -153,7 +152,6 @@ public class Server extends Thread{
 		for(Connection c : member_list)
 			if(c.getUser_name()!=null)
 				ret += c.getUser_name()+"\n";
-		System.out.println("myMembers(): "+ret);
 		return ret;
 	}
 	

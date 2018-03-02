@@ -79,7 +79,6 @@ class Connection extends Thread
 				{
 					case "MEMBERS":
 						String members = my_server.myMembers();
-						System.out.println("My members "+members);
 						outToClient.writeBytes(members+"\n");
 						break;
 					case "EXIST":
@@ -87,6 +86,10 @@ class Connection extends Thread
 						outToClient.writeBytes(my_server.exists(name)+"\n");
 						break;
 					case "CHAT":
+						name = inFromClient.readLine();
+						String message = inFromClient.readLine();
+						int TTL = Integer.parseInt(inFromClient.readLine());
+						outToClient.writeBytes(my_server.sendTo(name, message, TTL)+"\n");
 						break;
 					default:
 						outToClient.writeBytes("ERROR: "+capitalizedSentence);
@@ -166,7 +169,7 @@ class Connection extends Thread
 				break;
 			}catch(Exception e)
 			{
-				System.out.println("Please enter a valid number");
+				outToClient.writeBytes("Please enter a valid number\n");
 			}
 		}
 		
@@ -178,8 +181,9 @@ class Connection extends Thread
 					+ " or the TTL you inserted wasn't long enough\n"); 
 	}
 	
-	public boolean recieve(String message)
+	public boolean recieve(String message,int TTL)
 	{
+		if(TTL<0)return false;
 		if(!isConnected)return false;
 		try {
 			outToClient.writeBytes(message+"\n");
