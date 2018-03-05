@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -25,7 +26,12 @@ public class Name extends JFrame{
 		text.setPreferredSize(new Dimension(300,50));
 		
 		b.setActionCommand(text.getText());
-		b.addActionListener(listener);
+		b.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED,text.getText()));
+			}
+		});
 		
 		b.setPreferredSize(new Dimension(140,50));
 		

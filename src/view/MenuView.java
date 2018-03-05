@@ -15,9 +15,6 @@ public class MenuView extends JFrame {
 
 	
 	public MenuView(ActionListener listener){
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		content = frame.getContentPane();
-//		this.listener = listener;
 		
 		super("Connect");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +32,7 @@ public class MenuView extends JFrame {
 		button1.setActionCommand("s1");
 		button2.setActionCommand("s2");
 		
-		int side = 200;
+		int side = 100;
 		button1.setPreferredSize(new Dimension(side,side));
 		button2.setPreferredSize(new Dimension(side,side));
 		
@@ -45,7 +42,7 @@ public class MenuView extends JFrame {
 		
 		add(panel);
 		
-		setSize(520,270);
+		setSize(420,200);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		
