@@ -10,28 +10,55 @@ public class Client {
 	
 	private int port;
 	
+	DataOutputStream outToServer;
+	Socket clientSocket;
+	
 	public Client(int port) {
 		this.port = port;
 		try {
 			connect();
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage() + " "+port);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage() + " "+port);
 		}
 	}
 	
 	public void connect() throws UnknownHostException, IOException
 	{
-		Socket clientSocket = new Socket("localhost",port);
+		clientSocket = new Socket("localhost",port);
     	System.out.println("Connection established Successfully!");
         
-        Sender sender = new Sender(clientSocket);
-        Reciever reciever = new Reciever(clientSocket);
+//        Sender sender = new Sender(clientSocket);
+//        Reciever reciever = new Reciever(clientSocket);
+//        
+//        sender.start();
+//        reciever.start();
         
-        sender.start();
-        reciever.start();
-        
+        outToServer = new DataOutputStream(clientSocket.getOutputStream());
+        outToServer.writeBytes("CLIENT\n");
+	}
+	
+	public void join(String name) throws Exception
+	{
+		outToServer.writeBytes("JOIN\n");
+		outToServer.writeBytes(name);
+	}
+	
+	public void send(String name,String message,int TTL)
+	{
+		
+	}
+	
+	public void get_members()
+	{
+		
+	}
+	
+	public void quit() throws Exception
+	{
+		outToServer.writeBytes("QUIT\n");
+		clientSocket.close();
 	}
     
     static class Reciever extends Thread{

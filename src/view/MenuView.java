@@ -14,12 +14,12 @@ public class MenuView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	
-	public MenuView(String title,ActionListener listener){
+	public MenuView(ActionListener listener){
 //		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		content = frame.getContentPane();
 //		this.listener = listener;
 		
-		super(title);
+		super("Connect");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
@@ -52,7 +52,6 @@ public class MenuView extends JFrame {
 		setVisible(true);
 		
 		
-	}
-	
+	}	
 
 }
