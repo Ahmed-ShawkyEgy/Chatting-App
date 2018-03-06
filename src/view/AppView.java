@@ -29,7 +29,6 @@ public class AppView extends JFrame {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = dim.width/2-this.getSize().width/2, y = dim.height/2-this.getSize().height/2;
 		setLocation(x, y);
-//		setLayout(new BorderLayout());
 		setLayout(null);
 		
 		
@@ -73,7 +72,7 @@ public class AppView extends JFrame {
 		b.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				String command = "chat "+list.getSelectedValue()+" "+text.getText().trim() + " " + text1.getText();
+				String command = list.getSelectedValue()+"|"+text.getText().trim() + "|" + text1.getText();
 				listener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,command));
 			}
 		});

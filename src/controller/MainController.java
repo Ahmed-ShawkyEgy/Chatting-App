@@ -1,14 +1,12 @@
 package controller;
 
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle.Control;
 
 import javax.swing.JFrame;
 
 import listeners.AppListener;
 import listeners.MenuListener;
 import model.Client;
-import model.Main;
 import view.AppView;
 import view.MenuView;
 import view.Name;
@@ -28,7 +26,7 @@ public class MainController {
 	
 	public void connect(int port) 
 	{
-		client = new Client(port);
+		client = new Client(port,this);
 		frame.dispose();
 		frame = new Name(menu_listener);
 	}
@@ -45,7 +43,7 @@ public class MainController {
 			frame = new AppView(app_listener,name);
 			try{
 				
-			populate();
+			getMembers();
 			}catch(Throwable e)
 			{
 				e.printStackTrace();
@@ -64,7 +62,7 @@ public class MainController {
 		}
 	}
 
-	public void chat(String name,String message,int TTL) {
+	public void chat(String name,String message,String TTL) {
 		if(name!=null)
 		{
 			
@@ -72,14 +70,35 @@ public class MainController {
 		System.out.println("Chat with :"+name+message+TTL);
 	}
 	
-	public void populate() throws Throwable
+	public void getMembers()
 	{
-		String[] member = client.get_members().split(" ");
+		try {
+			client.get_members();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void populate(String[] member)
+	{
+//		String[] member = client.get_members().split(" ");
+		try{
 		((AppView)frame).clearMembers();
 		for (int i = 0; i < member.length; i++) {
 			((AppView)frame).addMember(member[i]);
 		}
+		}
+		catch(Throwable E)
+		{
+			E.printStackTrace();
+		}
 		
+	}
+	
+	public void print(String s)
+	{
+		if(frame instanceof AppView)
+			((AppView)frame).print(s);
 	}
 	
 	public static void main(String[] args) {

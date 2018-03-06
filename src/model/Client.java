@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import controller.MainController;
+
 public class Client { 
 	
 	private int port;
@@ -13,9 +15,12 @@ public class Client {
 	DataOutputStream outToServer;
 	Socket clientSocket;
 	BufferedReader inFromServer; 
+	Reciever reciever;
+	MainController controller;
 	
-	public Client(int port) {
+	public Client(int port,MainController controller) {
 		this.port = port;
+		this.controller = controller;
 		try {
 			connect();
 		} catch (UnknownHostException e) {
@@ -31,7 +36,7 @@ public class Client {
     	System.out.println("Connection established Successfully!");
         
 //        Sender sender = new Sender(clientSocket);
-//        Reciever reciever = new Reciever(clientSocket);
+        reciever = new Reciever(clientSocket,controller);
 //        
 //        sender.start();
 //        reciever.start();
@@ -44,28 +49,27 @@ public class Client {
         				InputStreamReader(clientSocket.getInputStream())); 
 	}
 	
-	public String join(String name) throws Exception
+	public void join(String name) throws Exception
 	{
 		outToServer.writeBytes("JOIN\n");
 		inFromServer.readLine();
 		outToServer.writeBytes(name+"\n");
-		return inFromServer.readLine();
+		reciever.start();
 	}
 	
-	public void send(String name,String message,int TTL)
+	public void send(String name,String message,int TTL)throws Throwable
 	{
+		outToServer.writeBytes("CHAT\n");
+		outToServer.writeBytes(name+"\n");
+		outToServer.writeBytes(TTL+"\n");
 		
 	}
 	
-	public String get_members() throws Throwable
+	public void get_members() throws Throwable
 	{
 		String members = "";
 		System.out.println("Get memebers");
 		outToServer.writeBytes("GET-MEMBERS\n");
-		Thread.sleep(100);
-		while(inFromServer.ready())
-			members += inFromServer.readLine();
-		return members;
 	}
 	
 	public void quit() throws Exception
@@ -74,10 +78,12 @@ public class Client {
 		clientSocket.close();
 	}
     
-    static class Reciever extends Thread{
+    class Reciever extends Thread{
     	Socket clientSocket;
-    	public Reciever(Socket s) {
+    	MainController controller;
+    	public Reciever(Socket s,MainController controller) {
     		clientSocket = s;
+    		this.controller = controller;
 		}
     	
     	public void run()
@@ -95,9 +101,17 @@ public class Client {
     			{
 
 	    			String recievedSentence = inFromServer.readLine();
+	    			if(recievedSentence.equals("@members"))
+	    			{
+	    				String members = "";
+	    				while(inFromServer.ready())
+	    					members += inFromServer.readLine();
+	    				controller.populate(members.split(" "));
+	    			}
 	    			if(recievedSentence.equals("bye"))
 	    				break;
 	    			System.out.println(recievedSentence); 
+	    			controller.print(recievedSentence);
     			}
     			
     			outToServer.writeBytes("Terminate Connection\n");
@@ -105,11 +119,13 @@ public class Client {
     			outToServer.close();
     			clientSocket.close();
     			System.out.println("Connection closed");
+    			controller.print("Connection closed");
     		}catch(Exception e)
     		{
     			System.out.println(e.getMessage());
     		}
     	}
+    	
     }
 
     static class Sender extends Thread

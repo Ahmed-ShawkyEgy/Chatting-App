@@ -116,7 +116,7 @@ class Connection extends Thread
 	
 	private void getMembers() throws IOException
 	{
-		outToClient.writeBytes(my_server.getMembers());
+		outToClient.writeBytes("@members\n"+my_server.getMembers());
 	}
 	
 	private void joinServer() throws IOException
@@ -154,13 +154,9 @@ class Connection extends Thread
 			return;
 		}
 		
-		outToClient.writeBytes("Server: Enter username: \n"); 
 		String reciever_name = inFromClient.readLine();
 
-		outToClient.writeBytes("Server: Enter Message: \n"); 
 		String message = inFromClient.readLine();
-		
-		outToClient.writeBytes("Server: Enter TTL: \n"); 
 		
 		int TTL ;
 		while(true)
