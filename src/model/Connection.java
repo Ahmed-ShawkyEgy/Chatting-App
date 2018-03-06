@@ -116,7 +116,7 @@ class Connection extends Thread
 	
 	private void getMembers() throws IOException
 	{
-		outToClient.writeBytes("Server: member list:\n"+my_server.getMembers());
+		outToClient.writeBytes(my_server.getMembers());
 	}
 	
 	private void joinServer() throws IOException

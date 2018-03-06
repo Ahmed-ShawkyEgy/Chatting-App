@@ -131,14 +131,8 @@ public class Server extends Thread{
 		String ret = myMembers();
 		try{
 			out_to_server.writeBytes("MEMBERS\n");
-			while(true)
-			{
-				String response = in_from_server.readLine();
-				if(response.isEmpty()){
-					break;
-				}
-				ret += response +"\n";
-			}
+			String response = in_from_server.readLine();
+			ret += response +"\n";
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -152,7 +146,7 @@ public class Server extends Thread{
 		String ret = "";
 		for(Connection c : member_list)
 			if(c.getUser_name()!=null)
-				ret += c.getUser_name()+"\n";
+				ret += c.getUser_name()+" ";
 		return ret;
 	}
 	

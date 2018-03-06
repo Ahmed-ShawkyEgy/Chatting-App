@@ -41,11 +41,8 @@ public class MainController {
 			try{
 			client.join(name);
 			frame.dispose();
-			System.out.println("Disposed success");
 			app_listener = new AppListener(this);
-			System.out.println("Begin create new frame");
 			frame = new AppView(app_listener,name);
-			System.out.println("Created Frame");
 			try{
 				
 			populate();
@@ -77,7 +74,7 @@ public class MainController {
 	
 	public void populate() throws Throwable
 	{
-		String[] member = client.get_members().split(" ");
+		String[] member = client.get_members().split("\n");
 		((AppView)frame).clearMembers();
 		for (int i = 0; i < member.length; i++) {
 			((AppView)frame).addMember(member[i]);

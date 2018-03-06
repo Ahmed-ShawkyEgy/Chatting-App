@@ -44,8 +44,6 @@ public class AppView extends JFrame {
 		model = new DefaultListModel<String>();
 	    JList<String> list = new JList<String>(model);
 	    JScrollPane pane = new JScrollPane(list);
-	    for (int i = 0; i < 15; i++)
-	        model.addElement("Element " + i);
 	    
 	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    

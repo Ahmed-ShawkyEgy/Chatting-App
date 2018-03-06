@@ -47,7 +47,7 @@ public class Client {
 	public String join(String name) throws Exception
 	{
 		outToServer.writeBytes("JOIN\n");
-		System.out.println(inFromServer.readLine() + " Should enter: " + name);
+		inFromServer.readLine();
 		outToServer.writeBytes(name+"\n");
 		return inFromServer.readLine();
 	}
@@ -62,7 +62,7 @@ public class Client {
 		String members = "";
 		System.out.println("Get memebers");
 		outToServer.writeBytes("GET-MEMBERS\n");
-//		Thread.sleep(1);
+		Thread.sleep(100);
 		while(inFromServer.ready())
 			members += inFromServer.readLine();
 		return members;
