@@ -74,7 +74,7 @@ public class MainController {
 	
 	public void populate() throws Throwable
 	{
-		String[] member = client.get_members().split("\n");
+		String[] member = client.get_members().split(" ");
 		((AppView)frame).clearMembers();
 		for (int i = 0; i < member.length; i++) {
 			((AppView)frame).addMember(member[i]);
@@ -83,7 +83,6 @@ public class MainController {
 	}
 	
 	public static void main(String[] args) {
-		Main server = new Main();
 		MainController controller = new MainController();
 		
 	}

@@ -103,7 +103,7 @@ class Connection extends Thread
 		
 		}catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	
