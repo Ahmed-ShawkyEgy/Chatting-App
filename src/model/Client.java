@@ -54,8 +54,8 @@ public class Client {
 		String s = inFromServer.readLine();
 		if(s.equals("false"))
 			return false;
-//		inFromServer.close();
 		reciever.start();
+//		inFromServer.close();
 		my_name = name;
 		joined = true;
 		return true;
@@ -65,6 +65,7 @@ public class Client {
 	{
 		outToServer.writeBytes("CHAT\n");
 		outToServer.writeBytes(name+"\n");
+		outToServer.writeBytes(my_name+": "+message+"\n");
 		outToServer.writeBytes(TTL+"\n");
 		
 	}
@@ -114,8 +115,16 @@ public class Client {
 	    				controller.populate(members.split(" "));
 	    				continue;
 	    			}
-	    			if(recievedSentence.equals("bye"))
+	    			else if(recievedSentence.equals("send-fail"))
+	    			{
+	    				controller.print("Server: Failed to send the message\n"
+	    						+ "either the user is offline or the"
+	    						+ "TTL was too short");
+	    				continue;
+	    			}
+	    			else if(recievedSentence.equals("bye"))
 	    				break;
+	    			
 	    			System.out.println(recievedSentence); 
 	    			controller.print(recievedSentence);
     			}
@@ -134,46 +143,4 @@ public class Client {
     	
     }
 
-    static class Sender extends Thread
-    {
-    	Socket clientSocket;
-    	
-    	public Sender(Socket s) {
-		clientSocket = s;
-		}
-    	
-    	public void run() {
-    		try{
-    			
-    			BufferedReader inFromUser = 
-  		          new BufferedReader(new InputStreamReader(System.in)); 
-    			
-		  		DataOutputStream outToServer = 
-	  				new DataOutputStream(clientSocket.getOutputStream());
-		  		
-		  		String sentence;
-		  		
-		  		outToServer.writeBytes("CLIENT\n");
-		  		
-		  		while(true)
-		  		{
-		  			if(!inFromUser.ready())
-		  			{
-		  				Thread.sleep(100);
-		  			}
-			  		sentence = inFromUser.readLine();
-					
-		            outToServer.writeBytes(sentence + '\n'); 
-		            if(sentence.toLowerCase().equals("quit"))
-		            	break;
-			  		
-		  		}
-		  		inFromUser.close();
-    		}catch(Exception e)
-    		{
-    			System.out.println(e.getMessage());
-    		}
-    	
-    	}
-    }
 } 

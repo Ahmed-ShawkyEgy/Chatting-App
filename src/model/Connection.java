@@ -157,24 +157,12 @@ class Connection extends Thread
 
 		String message = inFromClient.readLine();
 		
-		int TTL ;
-		while(true)
-		{
-			try{
-				TTL = Integer.parseInt(inFromClient.readLine());	
-				break;
-			}catch(Exception e)
-			{
-				outToClient.writeBytes("Please enter a valid number\n");
-			}
-		}
+		int TTL = Integer.parseInt(inFromClient.readLine());
 		
 		if(my_server.sendTo(reciever_name, message, TTL-1))
 			outToClient.writeBytes("Server: Message sent\n"); 
 		else
-			outToClient.writeBytes("Server: Failed Sending the message."
-					+ "Either this client is offline"
-					+ " or the TTL you inserted wasn't long enough\n"); 
+			outToClient.writeBytes("send-fail"); 
 	}
 	
 	public boolean recieve(String message,int TTL)

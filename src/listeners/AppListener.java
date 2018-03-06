@@ -29,7 +29,7 @@ public class AppListener implements ActionListener{
 		}
 		else
 		{
-			String[] request = cmd.split("|");
+			String[] request = cmd.split("\\|");
 			controller.chat(request[0], request[1],request[2]);
 		}
 		
