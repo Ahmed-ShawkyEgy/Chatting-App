@@ -12,6 +12,7 @@ public class Client {
 	
 	DataOutputStream outToServer;
 	Socket clientSocket;
+	BufferedReader inFromServer; 
 	
 	public Client(int port) {
 		this.port = port;
@@ -37,12 +38,18 @@ public class Client {
         
         outToServer = new DataOutputStream(clientSocket.getOutputStream());
         outToServer.writeBytes("CLIENT\n");
+        
+        inFromServer = 
+        		new BufferedReader(new
+        				InputStreamReader(clientSocket.getInputStream())); 
 	}
 	
-	public void join(String name) throws Exception
+	public String join(String name) throws Exception
 	{
 		outToServer.writeBytes("JOIN\n");
-		outToServer.writeBytes(name);
+		System.out.println(inFromServer.readLine() + " Should enter: " + name);
+		outToServer.writeBytes(name+"\n");
+		return inFromServer.readLine();
 	}
 	
 	public void send(String name,String message,int TTL)
@@ -50,9 +57,15 @@ public class Client {
 		
 	}
 	
-	public void get_members()
+	public String get_members() throws Throwable
 	{
-		
+		String members = "";
+		System.out.println("Get memebers");
+		outToServer.writeBytes("GET-MEMBERS\n");
+//		Thread.sleep(1);
+		while(inFromServer.ready())
+			members += inFromServer.readLine();
+		return members;
 	}
 	
 	public void quit() throws Exception
