@@ -81,16 +81,16 @@ public class Server extends Thread{
 	
 	public boolean sendTo(String name,String message,int TTL)
 	{
-		if(TTL--<0)
+		if(TTL<0)
 			return false;
 		if(name_to_index.containsKey(name))
 		{
 			int index = name_to_index.get(name);
-			return member_list.get(index).recieve(message,TTL);
+			return member_list.get(index).recieve(message,TTL-1);
 		}
 		try{
 			out_to_server.writeBytes("CHAT\n");
-			out_to_server.writeBytes(name+"\n"+message+"\n"+TTL+"\n");
+			out_to_server.writeBytes(name+"\n"+message+"\n"+(TTL-1)+"\n");
 			if(in_from_server.readLine().equals("false"))
 				return false;
 			else

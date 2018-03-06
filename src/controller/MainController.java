@@ -54,7 +54,6 @@ public class MainController {
 			{
 				System.out.println("Failed to join");
 				System.out.println(e.getMessage());
-				System.out.println(e.getMessage());
 			}
 		}
 		else
