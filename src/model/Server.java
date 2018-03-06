@@ -38,7 +38,7 @@ public class Server extends Thread{
 			System.out.println("Connected to other Server Successfully!");
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -75,7 +75,7 @@ public class Server extends Thread{
 				welcomeSocket.close();
 		}catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -91,9 +91,7 @@ public class Server extends Thread{
 		try{
 			out_to_server.writeBytes("CHAT\n");
 			out_to_server.writeBytes(name+"\n"+message+"\n"+TTL+"\n");
-			String s = in_from_server.readLine();
-			System.out.println("In from server: "+s);
-			if(s.equals("false"))
+			if(in_from_server.readLine().equals("false"))
 				return false;
 			else
 				return true;
@@ -117,7 +115,7 @@ public class Server extends Thread{
 		return response.equals("false");
 		}catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 			return false;
 		}
 	}
@@ -139,7 +137,7 @@ public class Server extends Thread{
 			ret += response +"\n";
 		}catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 			ret += "SERVER: error occured while trying to retrieve all members!\n";
 		}
 		return ret;

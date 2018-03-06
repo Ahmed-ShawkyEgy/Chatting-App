@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -24,7 +25,13 @@ public class AppView extends JFrame {
 	public AppView(ActionListener listener,String name) 
 	{
 		super(name);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(java.awt.event.WindowEvent event)
+			{
+				listener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"quit"));
+				System.exit(0);
+			}
+		});
 		setSize(820,820);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = dim.width/2-this.getSize().width/2, y = dim.height/2-this.getSize().height/2;

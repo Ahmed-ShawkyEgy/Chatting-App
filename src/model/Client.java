@@ -78,7 +78,6 @@ public class Client {
 	public void quit() throws Exception
 	{
 		outToServer.writeBytes("QUIT\n");
-		clientSocket.close();
 	}
     
     class Reciever extends Thread{

@@ -47,14 +47,14 @@ public class MainController {
 			getMembers();
 			}catch(Throwable e)
 			{
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 			System.out.println("Joined Successfully: "+name);
 			}catch(Exception e )
 			{
 				System.out.println("Failed to join");
 				System.out.println(e.getMessage());
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		}
 		else
@@ -71,7 +71,7 @@ public class MainController {
 			}
 			catch(Throwable e)
 			{
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class MainController {
 		try {
 			client.get_members();
 		} catch (Throwable e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -96,7 +96,7 @@ public class MainController {
 		}
 		catch(Throwable E)
 		{
-			E.printStackTrace();
+			System.out.println(E.getMessage());
 		}
 		
 	}
@@ -106,7 +106,19 @@ public class MainController {
 		((AppView)frame).print(s);
 	}
 	
+	public void quit()
+	{
+		try{
+		client.quit();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+	
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		MainController controller = new MainController();
 		
 	}

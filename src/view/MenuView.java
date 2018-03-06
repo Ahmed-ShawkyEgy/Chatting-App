@@ -42,7 +42,7 @@ public class MenuView extends JFrame {
 		
 		add(panel);
 		
-		setSize(420,200);
+		setSize(290,170);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		

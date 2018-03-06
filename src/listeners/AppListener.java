@@ -25,6 +25,10 @@ public class AppListener implements ActionListener{
 				e1.printStackTrace();
 			}
 		}
+		else if(cmd.equals("quit"))
+		{
+			controller.quit();
+		}
 		else
 		{
 			String[] request = cmd.split("\\|");
