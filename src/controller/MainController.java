@@ -34,7 +34,7 @@ public class MainController {
 	public void join(String name)
 	{
 		name = name.trim();
-		if(!name.isEmpty())
+		if(!name.isEmpty() && name.split(" ").length==1)
 		{
 			try{
 			if(!client.join(name))
@@ -59,7 +59,7 @@ public class MainController {
 		}
 		else
 		{
-			System.out.println("Empty String");
+			System.out.println("Usernames can't be empty nor have empty spaces");
 		}
 	}
 
