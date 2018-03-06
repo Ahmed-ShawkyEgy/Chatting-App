@@ -72,7 +72,6 @@ public class Client {
 	
 	public void get_members() throws Throwable
 	{
-		System.out.println("Get memebers");
 		outToServer.writeBytes("GET-MEMBERS\n");
 	}
 	

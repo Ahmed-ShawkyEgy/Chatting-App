@@ -91,7 +91,11 @@ public class Server extends Thread{
 		try{
 			out_to_server.writeBytes("CHAT\n");
 			out_to_server.writeBytes(name+"\n"+message+"\n"+TTL+"\n");
-			if(in_from_server.readLine().equals("true"))
+			String s = in_from_server.readLine();
+			System.out.println("In from server: "+s);
+			if(s.equals("false"))
+				return false;
+			else
 				return true;
 		}catch(Exception e){}
 		return false;

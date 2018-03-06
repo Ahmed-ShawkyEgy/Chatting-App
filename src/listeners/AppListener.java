@@ -11,13 +11,11 @@ public class AppListener implements ActionListener{
 	
 	public AppListener(MainController controller) {
 		this.controller = controller;
-		System.out.println("Listener Constructor");
 	}
 	
 	public void actionPerformed(ActionEvent e)
 	{
 		String cmd = e.getActionCommand();
-		System.out.println("ACTION REC: "+cmd);
 		if(cmd.equals("refresh"))
 		{
 			try{

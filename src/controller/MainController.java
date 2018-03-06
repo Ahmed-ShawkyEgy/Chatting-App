@@ -64,9 +64,6 @@ public class MainController {
 	}
 
 	public void chat(String name,String message,String TTL) {
-		System.out.println("Name:"+name);
-		System.out.println("Message:"+message);
-		System.out.println("TTL:"+TTL);
 		if(name!=null)
 		{
 			try{

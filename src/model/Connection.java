@@ -90,7 +90,10 @@ class Connection extends Thread
 						name = inFromClient.readLine();
 						String message = inFromClient.readLine();
 						int TTL = Integer.parseInt(inFromClient.readLine());
-						outToClient.writeBytes(my_server.sendTo(name, message, TTL)+"\n");
+						// REMOVE
+						boolean f = my_server.sendTo(name, message, TTL);
+						System.out.println("From connection.server.chat: "+f);
+						outToClient.writeBytes(f+"\n");
 						break;
 					default:
 						outToClient.writeBytes("ERROR: "+capitalizedSentence);
@@ -159,10 +162,12 @@ class Connection extends Thread
 		
 		int TTL = Integer.parseInt(inFromClient.readLine());
 		
-		if(my_server.sendTo(reciever_name, message, TTL-1))
+		boolean f = my_server.sendTo(reciever_name, message, TTL-1);
+		System.out.println("From connection.chat: "+f);
+		if(f)
 			outToClient.writeBytes("Server: Message sent\n"); 
 		else
-			outToClient.writeBytes("send-fail"); 
+			outToClient.writeBytes("send-fail\n"); 
 	}
 	
 	public boolean recieve(String message,int TTL)
