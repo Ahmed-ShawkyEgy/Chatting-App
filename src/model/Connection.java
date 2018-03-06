@@ -123,21 +123,20 @@ class Connection extends Thread
 	{
 		if(isConnected)
 		{
-			outToClient.writeBytes("Server: Already connected by the name "+user_name+"\n"); 
+			outToClient.writeBytes("false\n"); 
 			return;
 		}
 		else
 		{
-			outToClient.writeBytes("Server: Enter username:\n"); 
 			String in= inFromClient.readLine().trim();
 			if(in.isEmpty())
 			{
-				outToClient.writeBytes("Server: Can't take empty name :(\n"); 
+				outToClient.writeBytes("false\n"); 
 				return;
 			}
 			if(!my_server.add(in, index))
 			{
-				outToClient.writeBytes("Server: This name is Already taken :(\n"); 
+				outToClient.writeBytes("false\n"); 
 				return;
 			}
 			user_name = in;

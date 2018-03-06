@@ -17,6 +17,8 @@ public class Client {
 	BufferedReader inFromServer; 
 	Reciever reciever;
 	MainController controller;
+	String my_name;
+	boolean joined = false;
 	
 	public Client(int port,MainController controller) {
 		this.port = port;
@@ -34,12 +36,8 @@ public class Client {
 	{
 		clientSocket = new Socket("localhost",port);
     	System.out.println("Connection established Successfully!");
-        
-//        Sender sender = new Sender(clientSocket);
+    	
         reciever = new Reciever(clientSocket,controller);
-//        
-//        sender.start();
-//        reciever.start();
         
         outToServer = new DataOutputStream(clientSocket.getOutputStream());
         outToServer.writeBytes("CLIENT\n");
@@ -49,12 +47,18 @@ public class Client {
         				InputStreamReader(clientSocket.getInputStream())); 
 	}
 	
-	public void join(String name) throws Exception
+	public boolean join(String name) throws Exception
 	{
 		outToServer.writeBytes("JOIN\n");
-		inFromServer.readLine();
 		outToServer.writeBytes(name+"\n");
+		String s = inFromServer.readLine();
+		if(s.equals("false"))
+			return false;
+//		inFromServer.close();
 		reciever.start();
+		my_name = name;
+		joined = true;
+		return true;
 	}
 	
 	public void send(String name,String message,int TTL)throws Throwable
@@ -67,7 +71,6 @@ public class Client {
 	
 	public void get_members() throws Throwable
 	{
-		String members = "";
 		System.out.println("Get memebers");
 		outToServer.writeBytes("GET-MEMBERS\n");
 	}
@@ -101,12 +104,15 @@ public class Client {
     			{
 
 	    			String recievedSentence = inFromServer.readLine();
+	    			if(!joined)
+		    			continue;
 	    			if(recievedSentence.equals("@members"))
 	    			{
 	    				String members = "";
 	    				while(inFromServer.ready())
 	    					members += inFromServer.readLine();
 	    				controller.populate(members.split(" "));
+	    				continue;
 	    			}
 	    			if(recievedSentence.equals("bye"))
 	    				break;

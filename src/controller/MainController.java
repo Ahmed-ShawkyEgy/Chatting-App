@@ -37,7 +37,8 @@ public class MainController {
 		if(!name.isEmpty())
 		{
 			try{
-			client.join(name);
+			if(!client.join(name))
+				return;
 			frame.dispose();
 			app_listener = new AppListener(this);
 			frame = new AppView(app_listener,name);
@@ -65,7 +66,13 @@ public class MainController {
 	public void chat(String name,String message,String TTL) {
 		if(name!=null)
 		{
-			
+			try{
+				client.send(name, message, Integer.parseInt(TTL));
+			}
+			catch(Throwable e)
+			{
+				e.printStackTrace();
+			}
 		}
 		System.out.println("Chat with :"+name+message+TTL);
 	}
@@ -81,12 +88,12 @@ public class MainController {
 	
 	public void populate(String[] member)
 	{
-//		String[] member = client.get_members().split(" ");
 		try{
 		((AppView)frame).clearMembers();
 		for (int i = 0; i < member.length; i++) {
 			((AppView)frame).addMember(member[i]);
 		}
+		print("Refreshed!");
 		}
 		catch(Throwable E)
 		{
@@ -97,8 +104,7 @@ public class MainController {
 	
 	public void print(String s)
 	{
-		if(frame instanceof AppView)
-			((AppView)frame).print(s);
+		((AppView)frame).print(s);
 	}
 	
 	public static void main(String[] args) {

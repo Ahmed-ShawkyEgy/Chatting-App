@@ -52,9 +52,11 @@ public class AppView extends JFrame {
 	    
 	    /* Console */
 	    model2 = new DefaultListModel<String>();
-	    JList<String> list2 = new JList<String>();
+	    JList<String> list2 = new JList<String>(model2);
 	    JScrollPane pane2 = new JScrollPane(list2);
 	    add(pane2);
+	    for(int i = 0; i < 20;i++)
+	    	model2.addElement("HIII  " + i);
 	    pane2.setBounds(getWidth()/3 + 15 , 53 , getWidth()-getWidth()/3,(int)(getHeight()/1.3));
 	    
 		
