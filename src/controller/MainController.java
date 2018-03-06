@@ -63,7 +63,7 @@ public class MainController {
 	}
 
 	public void chat(String name,String message,String TTL) {
-		if(name!=null)
+		if(name!=null && !name.equals("null"))
 		{
 			try{
 				client.send(name, message, Integer.parseInt(TTL));
@@ -72,6 +72,10 @@ public class MainController {
 			{
 				System.out.println(e.getMessage());
 			}
+		}
+		else
+		{
+			print("Please select a valid user to chat with");
 		}
 	}
 	

@@ -134,13 +134,13 @@ public class Server extends Thread{
 		try{
 			out_to_server.writeBytes("MEMBERS\n");
 			String response = in_from_server.readLine();
-			ret += response +"\n";
+			ret += response;
 		}catch(Exception e)
 		{
 			System.out.println(e.getMessage());
-			ret += "SERVER: error occured while trying to retrieve all members!\n";
+			ret += "SERVER: error occured while trying to retrieve all members!";
 		}
-		return ret;
+		return ret + "\n";
 	}
 	
 	public String myMembers()

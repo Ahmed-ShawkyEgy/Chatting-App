@@ -107,10 +107,10 @@ public class Client {
 		    			continue;
 	    			if(recievedSentence.equals("@members"))
 	    			{
-	    				String members = "";
-	    				while(inFromServer.ready())
-	    					members += inFromServer.readLine();
+	    				String members = inFromServer.readLine();
 	    				controller.populate(members.split(" "));
+	    				while(inFromServer.ready())
+	    					System.out.println("Tempoo "+inFromServer.readLine());
 	    				continue;
 	    			}
 	    			else if(recievedSentence.equals("send-fail"))
@@ -118,6 +118,8 @@ public class Client {
 	    				controller.print("Server: Failed to send the message\n"
 	    						+ "either the user is offline or the"
 	    						+ "TTL was too short");
+	    				while(inFromServer.ready())
+	    					System.out.println("Tempoo "+inFromServer.readLine());
 	    				continue;
 	    			}
 	    			else if(recievedSentence.equals("bye"))
