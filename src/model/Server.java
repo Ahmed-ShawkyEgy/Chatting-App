@@ -147,7 +147,7 @@ public class Server extends Thread{
 	{
 		String ret = "";
 		for(Connection c : member_list)
-			if(c.getUser_name()!=null)
+			if(c.getUser_name()!=null && c.isConnected())
 				ret += c.getUser_name()+" ";
 		return ret;
 	}

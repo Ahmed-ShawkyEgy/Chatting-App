@@ -190,5 +190,11 @@ class Connection extends Thread
 		return user_name;
 	}
 
+
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
 	
 }
